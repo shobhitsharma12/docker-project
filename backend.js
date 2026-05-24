@@ -8,19 +8,27 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect("mongodb://127.0.0.1:27017/userdb", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb://admin:qwerty@localhost:27017/userdb?authSource=admin",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 console.log("MongoDB Connected");
 
 // Schema
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phone: String,
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: String,
+    email: String,
+    phone: String,
+  },
+  {
+    collection: "User",
+  }
+);
 
 const User = mongoose.model("User", userSchema);
 
@@ -60,6 +68,6 @@ app.get("/users", async (req, res) => {
 });
 
 // Server
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(5001, () => {
+  console.log("Server running on port 5001");
 });
