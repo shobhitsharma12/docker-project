@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Form</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 30px;
+      background: #f4f4f4;
+    }
+
+    .container {
+      width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background: blue;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .user {
+      background: #eee;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>User Form</h2>
+
+    <input type="text" id="name" placeholder="Enter Name" />
+    <input type="email" id="email" placeholder="Enter Email" />
+    <input type="text" id="phone" placeholder="Enter Phone Number" />
+
+    <button onclick="addUser()">Submit</button>
+
+    <button onclick="getUsers()">View All Users</button>
+
+    <div id="users"></div>
+  </div>
+
+  <script>
+    async function addUser() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      const response = await fetch("http://localhost:5000/add-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone
+        })
+      });
+
+      const data = await response.json();
+
+      alert(data.message);
+    }
+
+    async function getUsers() {
+      const response = await fetch("http://localhost:5000/users");
+
+      const data = await response.json();
+
+      const usersDiv = document.getElementById("users");
+
+      usersDiv.innerHTML = "";
+
+      data.data.forEach(user => {
+        usersDiv.innerHTML += `
+          <div class="user">
+            <p><b>Name:</b> ${user.name}</p>
+            <p><b>Email:</b> ${user.email}</p>
+            <p><b>Phone:</b> ${user.phone}</p>
+          </div>
+        `;
+      });
+    }
+  </script>
+
+</body>
+</html>
